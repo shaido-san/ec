@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,19 @@
 </head>
 <body>
     <h1>商品一覧</h1>
-    <p>ここに一覧が表示される</p>
+    {% for product in products %}
+    <div>
+        <h2>{{ product.name }}</h2>
+        <p>価格: ¥{{ product.price }}</p>
+        <p>{{ product.information }}</p>
+        {% if product.image %}
+           <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
+        {% endif %}
+        <p>在庫: {{ product.stock }}</p>
+        <hr>
+    </div>
+    {% empty %}
+       <p>商品は品切れです。入荷までお待ちください。</p>
+    {% endfor %}
 </body>
 </html>
