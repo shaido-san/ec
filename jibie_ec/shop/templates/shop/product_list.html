@@ -9,7 +9,9 @@
     <h1>商品一覧</h1>
     {% for product in products %}
     <div>
-        <h2>{{ product.name }}</h2>
+        <h2>
+            <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+        </h2>
         <p>価格: ¥{{ product.price }}</p>
         <p>{{ product.information }}</p>
         {% if product.image %}

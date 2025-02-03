@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カート</title>
+</head>
+<body>
+    <h1>カートの中身</h1>
+
+{% if cart_items %}
+       <table border="1">
+        <tr>
+            <th>商品名</th>
+            <th>数量</th>
+            <th>価格</th>
+            <th>小計</th>
+            <th>削除</th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.product.price }}</td>
+            <td>{{ item.total_price }}</td>
+        </tr>
+        {% endfor %}
+       </table>
+
+       <p>合計金額： ¥{{ total_amount }}</p>
+{% else %}
+   <p>カートに商品がありません</p>
+{% endif %}
+    <a href="{% url 'product_list' %}">⬅️ 商品一覧へ戻る</a>
+</body>
+</html>
