@@ -1,3 +1,5 @@
+import stripe
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product
 
@@ -48,3 +50,40 @@ def add_to_cart(request, product_id):
     request.session['cart'] = cart
     # カート詳細ページへリダイレクト
     return redirect('cart_detail')
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def checkout(request):
+    # stripe checkoutのセッションを作成
+    cart = request.session.get('cart', {})
+
+    if not cart:
+        return redirect('cart_detail')
+    
+    line_items = []
+    for product_id, quantity in cart.items():
+        product = Product.objects.get(id=product_id)
+        line_items.append({
+            'price_data': {
+                'currency': 'jpy',
+                'product_data': {'name': product.name},
+                'unit_amount': product.price
+            },
+            'quantity': quantity,
+        })
+    
+    # Stripe Checkoutセッションを作成
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=line_items,
+        mode='payment',
+        success_url=request.build_absolute_uri('/checkout/success/'),
+        cancel_url=request.build_absolute_uri('/cart/'),
+    )
+
+    return redirect(session.url, code=303)
+
+def checkout_success(request):
+    # 購入完了ページへ移動し、購入完了後にカートを空にする
+    request.session['cart'] = {}
+    return render(request, 'shop/checkout_success.html')

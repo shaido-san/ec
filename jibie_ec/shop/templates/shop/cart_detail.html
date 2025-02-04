@@ -28,6 +28,11 @@
        </table>
 
        <p>合計金額： ¥{{ total_amount }}</p>
+
+       <form action="{% url 'checkout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">購入を完了する</button>
+       </form>
 {% else %}
    <p>カートに商品がありません</p>
 {% endif %}
