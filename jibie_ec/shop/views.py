@@ -1,6 +1,8 @@
 import stripe
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 from .models import Product
 
 def product_list(request):
@@ -87,3 +89,16 @@ def checkout_success(request):
     # 購入完了ページへ移動し、購入完了後にカートを空にする
     request.session['cart'] = {}
     return render(request, 'shop/checkout_success.html')
+
+def user(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # 登録後に自動ログイン
+            login(request, user)
+            return redirect('product_list')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'shop/user.html', {'form': form})

@@ -23,6 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# ログイン後、ログアウト後に商品一覧へリダイレクト
+LOGIN_REDIRECT_URL = 'product_list'  
+LOGOUT_REDIRECT_URL = 'product_list'  
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

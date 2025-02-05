@@ -7,6 +7,22 @@
 </head>
 <body>
     <h1>商品一覧</h1>
+
+    <nav>
+        {% if user.is_authenticated %}
+           <p>いらっしゃいませ！！、{{ user.username }} 様！</p>
+           <!-- LogoutViewはPOSTリクエストを要求するため、<form>で書く -->
+           <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">ログアウトする</button>
+           </form>
+           
+        {% else %}
+           <a href="{% url 'login' %}">ログインする</a>
+           <a href="{% url 'user' %}">新規登録する</a>
+        {% endif %}
+
+    </nav>
     {% for product in products %}
     <div>
         <h2>
